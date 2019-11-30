@@ -184,6 +184,10 @@
       <Project>{e9437256-3145-47bf-81a3-c69fd4de95f4}</Project>
       <Name>TicketsDemo.EF</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TicketsDemo.MongoDbProj\TicketsDemo.MongoDbProj.csproj">
+      <Project>{9913d84e-237a-4d44-896b-c920f279b099}</Project>
+      <Name>TicketsDemo.MongoDbProj</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

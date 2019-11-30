@@ -14,7 +14,7 @@ namespace TicketsDemo.Domain.DefaultImplementations
 
         public FileLogger(string dataFolder)
         {
-            _dataFolder = dataFolder;
+            _dataFolder = dataFolder;  
         }
 
         public void Log(string message, LogSeverity severity)

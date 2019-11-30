@@ -12,7 +12,10 @@ namespace TicketsDemo.App_Start
     using TicketsDemo.Domain.DefaultImplementations;
     using TicketsDemo.Domain.DefaultImplementations.PriceCalculationStrategy;
     using TicketsDemo.Domain.Interfaces;
+    using TicketsDemo.Domain.WeekendsCalculation;
     using TicketsDemo.EF.Repositories;
+    using TicketsDemo.MongoDbProj.Repositories;
+    using TicketsDemo.Domain;
 
     public static class NinjectWebCommon 
     {
@@ -65,19 +68,24 @@ namespace TicketsDemo.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<ITicketRepository>().To<TicketRepository>();
-            kernel.Bind<ITrainRepository>().To<TrainRepository>();
+            //kernel.Bind<ITrainRepository>().To<TrainRepository>();
+            kernel.Bind<ITrainRepository>().To<mongoDbTrainRepository>();
 
             kernel.Bind<IRunRepository>().To<RunRepository>();
             kernel.Bind<IReservationRepository>().To<ReservationRepository>();
 
             kernel.Bind<ISchedule>().To<Schedule>();
-            kernel.Bind<ITicketService>().To<TicketService>();
+            //kernel.Bind<ITicketService>().To<TicketService>();
+            kernel.Bind<ITicketService>().To<TicketsServiceLoggingDecorator>();
+
             kernel.Bind<IReservationService>().To<ReservationService>();
+            kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
+           
 
             //todo factory
-            kernel.Bind<IPriceCalculationStrategy>().To<DefaultPriceCalculationStrategy>();
-            kernel.Bind<ILogger>().ToMethod(x =>
-                new FileLogger(HttpContext.Current.Server.MapPath("~/App_Data")));
+            kernel.Bind<IPriceCalculationStrategy>().To<WeekendPriceCalculationStrategy>();
+            kernel.Bind<ILogger>().To<ConsoleLogger>();
+            
         }        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,7 @@ namespace TicketsDemo.Data.Entities
 {
     public class Train
     {
+        [BsonId]
         public int Id { get; set; }
         public int Number { get; set; }
         public string StartLocation { get; set; }

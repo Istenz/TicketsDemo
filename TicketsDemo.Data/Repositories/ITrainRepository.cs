@@ -15,4 +15,5 @@ namespace TicketsDemo.Data.Repositories
         void UpdateTrain(Train train);
         void DeleteTrain(Train train);
     }
+   
 }

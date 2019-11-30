@@ -6,9 +6,13 @@ namespace TicketsDemo.EF.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
     using TicketsDemo.Data.Entities;
+    
 
+    
     internal sealed class Configuration : DbMigrationsConfiguration<TicketsDemo.EF.TicketsContext>
     {
+        
+        
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
@@ -23,6 +27,7 @@ namespace TicketsDemo.EF.Migrations
             
             Func<List<Place>> placeGenerator = () =>
             {
+                
                 var retIt = new List<Place>();
                 Random random = new Random();
                  
@@ -93,6 +98,70 @@ namespace TicketsDemo.EF.Migrations
               }
 
             );
+
+            context.Holidays.AddOrUpdate(
+                d => d.Id,
+                    new Holiday
+                {
+                    Id = 1,
+                    Day = 31,
+                    Month = 12
+                },
+                    new Holiday
+                {
+                    Id = 2,
+                    Day = 14,
+                    Month = 10
+                },
+                    new Holiday
+                {
+                    Id = 3,
+                    Day = 18,
+                    Month = 11
+                },
+                    new Holiday
+                {
+                    Id = 4,
+                    Day = 6,
+                    Month = 12
+                },
+                    new Holiday
+                {
+                    Id = 5,
+                    Day = 8,
+                    Month = 4
+                },
+                    new Holiday
+                {
+                    Id = 6,
+                    Day = 19,
+                    Month = 11
+                },
+                    new Holiday
+                {
+                    Id = 7,
+                    Day = 25,
+                    Month = 12
+                },
+                    new Holiday
+                {
+                    Id = 8,
+                    Day = 8,
+                    Month = 4
+                },
+                    new Holiday
+                {
+                    Id = 9,
+                    Day = 30,
+                    Month = 10
+                },
+                    new Holiday
+                {
+                    Id = 10,
+                    Day = 24,
+                    Month = 8
+                }
+           ); 
             
         }
     }

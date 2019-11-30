@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace TicketsDemo.Data.Entities
         public int Number { get; set; }
         public decimal PriceMultiplier { get; set; }
         public int CarriageId { get; set; }
+        [BsonIgnore]
         public Carriage Carriage { get; set; }
     }
 }
