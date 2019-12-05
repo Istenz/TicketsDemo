@@ -86,7 +86,7 @@ namespace TicketsDemo.Controllers
             ticketWM.PlaceNumber = placeInRun.Number;
             ticketWM.Date = placeInRun.Run.Date;
             ticketWM.Train = _trainRepo.GetTrainDetails(placeInRun.Run.TrainId);
-            
+
             return View(ticketWM);
         }
 

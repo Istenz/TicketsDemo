@@ -9,68 +9,36 @@ using TicketsDemo.Domain.Interfaces;
 
 namespace TicketsDemo.Domain.DefaultImplementations
 {
-    public class TicketsServiceLoggingDecorator : ITicketService
+    public class ConsoleLoggerDecorator : ITicketService
     {
-        private ITicketRepository _tickRepo;
-        private IPriceCalculationStrategy _priceStr;
-        private IReservationRepository _resRepo;
-        private IRunRepository _runRepository;
-        private ITrainRepository _trainRepo;
         private ILogger _logger;
-        protected PlaceInRun place;
-        protected Ticket newTicket;
+        private ITicketService _innerService;
         protected Train train;
-        public TicketsServiceLoggingDecorator(ITicketRepository tickRepo, IReservationRepository resRepo, ITrainRepository trainRepo,
-            IPriceCalculationStrategy priceCalculationStrategy, IRunRepository runRepository, ILogger logger)
+        public ConsoleLoggerDecorator(ITicketService innerService, ILogger logger)
         {
-            _tickRepo = tickRepo;
-            _resRepo = resRepo;
-            _trainRepo = trainRepo;
-            _priceStr = priceCalculationStrategy;
-            _runRepository = runRepository;
+            _innerService = innerService;
             _logger = logger;
         }
 
         public Ticket CreateTicket(int reservationId, string fName, string lName)
         {
-            var res = _resRepo.Get(reservationId);
+            Ticket ticketToReturn = _innerService.CreateTicket(reservationId, fName, lName);
+            TicketConsoleLog(ticketToReturn);
 
-            if (res.TicketId != null)
-            {
-                throw new InvalidOperationException("ticket has been already issued to this reservation, unable to create another one");
-            }
-
-            place = _runRepository.GetPlaceInRun(res.PlaceInRunId);
-            train = _trainRepo.GetTrainDetails(place.Run.TrainId);
-            newTicket = new Ticket()
-            {
-                ReservationId = res.Id,
-                CreatedDate = DateTime.Now,
-                FirstName = fName,
-                LastName = lName,
-                Status = TicketStatusEnum.Active,
-                PriceComponents = new List<PriceComponent>()
-            };
-
-            newTicket.PriceComponents = _priceStr.CalculatePrice(place);
-            _tickRepo.Create(newTicket);
-            TicketConsoleLog();
-            return newTicket;
+            return ticketToReturn;
         }
 
         public void SellTicket(Ticket ticket)
         {
-            if (ticket.Status == TicketStatusEnum.Sold)
-            {
-                throw new ArgumentException("ticket is already sold");
-            }
-
-            ticket.Status = TicketStatusEnum.Sold;
-            _tickRepo.Update(ticket);
+            _innerService.SellTicket(ticket);
         }
-        public void TicketConsoleLog()
+        public void TicketConsoleLog(Ticket ticket)
         {
-            var ticketMSG = $"\n Person info: {newTicket.FirstName} {newTicket.LastName}\n Train number: {train.Number}\n Route: {train.StartLocation}-{train.EndLocation}\n Date: {place.Run.Date}\n Place number: {place.Number}\n Carriage number: {place.CarriageNumber}";
+            string ticketMSG = "\nNew ticket has been bought:";
+            ticketMSG += "\nTicket Id: " + ticket.Id;
+            ticketMSG += "\nReservation Id: " + ticket.ReservationId;
+            ticketMSG += "\n" + ticket.FirstName + " " + ticket.LastName;
+
             _logger.Log(ticketMSG, LogSeverity.Info);
         }
 

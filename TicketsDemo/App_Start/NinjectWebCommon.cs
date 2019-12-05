@@ -76,7 +76,9 @@ namespace TicketsDemo.App_Start
 
             kernel.Bind<ISchedule>().To<Schedule>();
             //kernel.Bind<ITicketService>().To<TicketService>();
-            kernel.Bind<ITicketService>().To<TicketsServiceLoggingDecorator>();
+            kernel.Bind<ITicketService>().ToMethod(x => new ConsoleLoggerDecorator(
+                x.Kernel.Get<TicketService>(), new ConsoleLogger()));
+            //kernel.Bind<ITicketService>().To<TicketsServiceLoggingDecorator>();
 
             kernel.Bind<IReservationService>().To<ReservationService>();
             kernel.Bind<IHolidayRepository>().To<HolidayRepository>();
